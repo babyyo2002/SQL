@@ -1,0 +1,286 @@
+#Inicio ejercicio I - Necesito crear una BBDD 
+CREATE DATABASE MariaRomero
+#fin I
+#Inicio Ejercicio II.1
+USE [MariaRomero]
+GO
+SET ANSI_NULLS ON
+GO
+CREATE TYPE Observaciones FROM varchar(1000) NULL
+GO
+CREATE TABLE Clientes (
+					IdCliente int NOT NULL IDENTITY (1,1) PRIMARY KEY,
+					Nombre varchar(50) NOT NULL,
+					Apellido varchar(50) NOT NULL,
+					Fnacimiento date NOT NULL,
+					Domicilio varchar(50) NOT NULL,
+					IdPais char(3) NOT NULL,
+					Telefono varchar(12) NULL,
+					Email varchar(30) NOT NULL,
+					Observaciones Observaciones,
+					FechaAlta datetime NOT NULL
+)
+GO
+#fin ejercicio II.1
+#Inicio Ejercicio II.2
+USE [MariaRomero]
+GO
+SET ANSI_NULLS ON
+GO
+CREATE TABLE Record (
+					Idrecord int NOT NULL IDENTITY (1,1) PRIMARY KEY,
+					FechaRecord date NOT NULL,
+					Observaciones Observaciones
+)
+GO
+#fin ejercicio II.2
+#Inicio Ejercicio II.3
+USE [MariaRomero]
+GO
+SET ANSI_NULLS ON
+GO
+CREATE TABLE RecordCliente (
+					Idrecord int NOT NULL,
+					IdCliente int NOT NULL,
+					IdCampania int NOT NULL
+PRIMARY KEY CLUSTERED (
+					IdRecord ASC,
+					IdCliente ASC,
+					IdCampania ASC)
+)
+GO
+#fin ejercicio II.3
+#Inicio Ejercicio II.4
+USE [MariaRomero]
+GO
+SET ANSI_NULLS ON
+GO
+CREATE TABLE Pais (
+					IdPais char(3) NOT NULL PRIMARY KEY,
+					NombrePais varchar(100) NOT NULL
+)
+GO
+#fin ejercicio II.4
+#Inicio Ejercicio II.5
+USE [MariaRomero]
+GO
+SET ANSI_NULLS ON
+GO
+CREATE TABLE HoraCaptacion (
+					IdHCaptacion int NOT NULL IDENTITY(1,1) PRIMARY KEY,
+					FechaCaptacion date NOT NULL,
+					EstadoCaptacion smallint NOT NULL,
+					Observaciones observaciones
+)
+GO
+#fin ejercicio II.5
+#Inicio Ejercicio II.6
+USE [MariaRomero]
+GO
+SET ANSI_NULLS ON
+GO
+CREATE TABLE HoraCapClienteCampania (
+					IdHCaptacion int NOT NULL,
+					IdCliente int NOT NULL,
+					IdCampania int NOT NULL
+PRIMARY KEY CLUSTERED (
+					IdHCaptacion ASC,
+					IdCliente ASC,
+					IdCampania ASC)
+)
+GO
+#fin ejercicio II.6
+#Inicio Ejercicio II.7
+USE [MariaRomero]
+GO
+SET ANSI_NULLS ON
+GO
+CREATE TABLE HorarioEstado (
+					IdEstado smallint NOT NULL IDENTITY (1,1) PRIMARY KEY,
+					Descripcion varchar(50) NOT NULL				
+)
+GO
+#fin ejercicio II.7
+#Inicio Ejercicio II.8
+USE [MariaRomero]
+GO
+SET ANSI_NULLS ON
+GO
+CREATE TABLE Producto (
+					IdProducto int NOT NULL IDENTITY (1,1) PRIMARY KEY,
+					Producto varchar(100) NOT NULL				
+)
+GO
+#fin ejercicio II.8
+#Inicio Ejercicio II.9
+USE [MariaRomero]
+GO
+SET ANSI_NULLS ON
+GO
+CREATE TABLE Compra (
+					IdCompras int NOT NULL IDENTITY (1,1) PRIMARY KEY,
+					Concepto int NOT NULL,	
+					Fecha datetime NOT NULL,
+					Monto money NOT NULL,
+					Observaciones observaciones
+)
+GO
+#fin ejercicio II.9
+#Inicio Ejercicio II.10
+USE [MariaRomero]
+GO
+SET ANSI_NULLS ON
+GO
+CREATE TABLE CompraCliente (
+					IdCompras int NOT NULL,
+					IdCliente int NOT NULL,
+					IdHCaptacion int NOT NULL
+PRIMARY KEY CLUSTERED (
+					IdCompras ASC,
+					IdCliente ASC,
+					IdHCaptacion ASC)
+)
+GO
+#fin ejercicio II.10
+#Inicio Ejercicio II.11
+USE [MariaRomero]
+GO
+SET ANSI_NULLS ON
+GO
+CREATE TABLE Campania (
+					IdCampania int NOT NULL IDENTITY(1,1) PRIMARY KEY,
+					NombreCampania varchar(50) NOT NULL
+)
+GO
+#fin ejercicio II.11
+#Inicio Ejercicio II.12
+USE [MariaRomero]
+GO
+SET ANSI_NULLS ON
+GO
+CREATE TABLE CampaniaProducto (
+					IdCampania int NOT NULL IDENTITY (1,1),
+					IdProducto int NOT NULL,
+					Descripcion varchar(100) NOT NULL
+PRIMARY KEY CLUSTERED (
+					IdCampania ASC,
+					IdProducto ASC)
+)
+GO
+#fin ejercicio II.12
+#Inicio Ejercicio II.13
+USE [MariaRomero]
+GO
+SET ANSI_NULLS ON
+GO
+CREATE TABLE ConceptoCompra (
+					IdConcepto int NOT NULL IDENTITY (1,1) PRIMARY KEY,
+					Concepto varchar(100) NOT NULL
+)
+GO
+#fin ejercicio II.13
+#Inicio Ejercicio IV.B.1 
+USE [MariaRomero]
+GO
+SET ANSI_NULLS ON
+GO
+INSERT INTO HoraCaptacion VALUES (CONVERT(DATETIME, '2024-01-01T10:00:00', 126),1,'Desconocido')
+GO
+--select * from HoraCaptacion
+#fin ejercicio IV.B.1
+#Inicio Ejercicio IV.B.2 
+USE [MariaRomero]
+GO
+SET ANSI_NULLS ON
+GO
+INSERT INTO HoraCapClienteCampania VALUES (11,4,2)											
+GO
+/*
+select * from HoraCapClienteCampania
+select * from HoraCaptacion
+select * from Campania
+select * from Clientes
+*/
+#fin ejercicio IV.B.2
+#Inicio Ejercicio V.1
+select * from clientes
+#fin ejercicio V.1
+#Inicio Ejercicio V.2
+select nombre from Clientes
+#fin ejercicio V.2
+#Inicio Ejercicio V.3
+Select top(3)* from Clientes order by Fnacimiento ASC
+#fin ejercicio V.3
+#Inicio Ejercicio V.4
+Select distinct (idpais) from Clientes
+#fin ejercicio V.4
+#Inicio Ejercicio V.5
+--select * from Clientes
+update clientes set email = '200@gmail.com' 
+	where idcliente = (select top 1 IdCliente from clientes order by IdCliente)
+#fin ejercicio V.5
+#Inicio Ejercicio V.6
+Select AVG(monto) PromedioMonto from Compra
+#fin ejercicio V.6
+#Inicio Ejercicio V.7
+select * from HoraCaptacion where FechaCaptacion between '20240101' and '20240130'
+#fin ejercicio V.7
+#Inicio Ejercicio V.8
+USE [MariaRomero]
+GO
+IF EXISTS (SELECT 1 FROM Clientes WHERE IdPais = 'ESP')
+BEGIN
+    SELECT * 
+    FROM Clientes
+    WHERE IdPais = 'ESP';
+END
+ELSE
+BEGIN
+    PRINT 'No hay registros con nacionalidad española.';
+END
+GO
+#fin ejercicio V.8
+#Inicio Ejercicio V.9
+select * from pais
+select *,(case when IdPais = 'BRA' then 'América'
+				when IdPais = 'DEU' then 'Europa'
+				when IdPais = 'ESP' then 'Europa'
+				when IdPais = 'GRC' then 'Europa'
+				when IdPais = 'IND' then 'Asia'
+				when IdPais = 'MEX' then 'América'
+				when IdPais = 'USA' then 'América'
+			else 'Desconocido'
+			END)as Continente from Pais
+#fin ejercicio V.9
+#Inicio Ejercicio V.10
+/*
+select * from Clientes
+ALTER TABLE Clientes
+ADD dni varchar(20)
+EXEC Alta_Cliente '2351365', 'Raúl','Stuart','19850521','Las regasta 25','ESP','655821547','Raul@krokimail.com',''
+*/
+ALTER proc ALTA_Cliente(
+			@dni varchar(20),
+			@nombre varchar(50),
+			@apellido varchar(50),
+			@fNacimiento date,
+			@domicilio varchar(50),
+			@idPais char(3),
+			@telefono varchar(12)='',
+			@email varchar(30),
+			@obsevacion observaciones=''
+			)
+as
+IF NOT EXISTS(SELECT * FROM Clientes WHERE dni=@dni)
+BEGIN
+	INSERT INTO Clientes(dni,nombre,apellido,fNacimiento,domicilio,idPais,telefono,email,Observaciones, FechaAlta)
+	VALUES (@dni,@nombre,@apellido,@fNacimiento,@domicilio,@idPais,@telefono,@email,@obsevacion,GETDATE())
+	print 'El paciente se agregó correctamente'
+	return
+END
+ELSE
+BEGIN
+	PRINT 'El paciente ya existe'
+	RETURN
+END
+#fin ejercicio V.10
